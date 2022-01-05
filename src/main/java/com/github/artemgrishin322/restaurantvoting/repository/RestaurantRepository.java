@@ -8,8 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
-public interface RestaurantRepository extends BaseRepository<Restaurant>{
-    @EntityGraph(attributePaths = "todayMenu", type = EntityGraph.EntityGraphType.LOAD)
-    @Query("SELECT r FROM Restaurant r WHERE r.id=?1")
-    Optional<Restaurant> getWithMenu(int id);
+public interface RestaurantRepository extends BaseRepository<Restaurant> {
 }

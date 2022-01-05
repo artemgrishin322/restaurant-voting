@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Date;
 
 @Entity
@@ -20,6 +21,7 @@ public class Dish extends NamedEntity {
     Date registered = new Date();
 
     @Column(name = "price")
+    @PositiveOrZero
     @NotNull
     Integer price;
 

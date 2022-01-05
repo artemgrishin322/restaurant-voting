@@ -37,7 +37,7 @@ public class Restaurant extends NamedEntity {
     @JsonManagedReference
     Set<Dish> todayMenu;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "votedTo")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @ToString.Exclude
     Set<Vote> votes;
 

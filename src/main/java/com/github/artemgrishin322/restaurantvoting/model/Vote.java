@@ -24,13 +24,13 @@ public class Vote extends BaseEntity {
     @JoinColumn(name = "user_id")
     @NotNull
     @ToString.Exclude
-    User owner;
+    User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @NotNull
     @ToString.Exclude
-    Restaurant votedTo;
+    Restaurant restaurant;
 
     public Vote(Integer id) {
         super(id);

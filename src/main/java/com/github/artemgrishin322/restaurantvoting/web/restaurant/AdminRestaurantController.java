@@ -1,16 +1,15 @@
 package com.github.artemgrishin322.restaurantvoting.web.restaurant;
 
 import com.github.artemgrishin322.restaurantvoting.model.Restaurant;
-import com.github.artemgrishin322.restaurantvoting.repository.RestaurantRepository;
+import com.github.artemgrishin322.restaurantvoting.web.AuthUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -18,30 +17,26 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
-import static com.github.artemgrishin322.restaurantvoting.util.ValidationUtil.*;
+import static com.github.artemgrishin322.restaurantvoting.util.ValidationUtil.assureIdConsistent;
+import static com.github.artemgrishin322.restaurantvoting.util.ValidationUtil.checkNew;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @CacheConfig(cacheNames = "restaurants")
 @Slf4j
-public class AdminRestaurantController {
+public class AdminRestaurantController extends AbstractRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
-
-    @Autowired
-    private RestaurantRepository repository;
 
     @GetMapping
     @Cacheable
     public List<Restaurant> getAll() {
-        log.info("getting all restaurants");
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
+        return super.getAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> get(@PathVariable int id) {
-        log.info("getting restaurant with id = {}", id);
-        return ResponseEntity.of(repository.findById(id));
+        return super.get(id);
     }
 
     @DeleteMapping("/{id}")
@@ -72,8 +67,8 @@ public class AdminRestaurantController {
         repository.save(restaurant);
     }
 
-    @GetMapping("/{id}/with-menu")
-    public ResponseEntity<Restaurant> getWithMenu(@PathVariable int id) {
-        return ResponseEntity.of(repository.getWithMenu(id));
+    @PatchMapping("/{id}")
+    public void vote(@AuthenticationPrincipal AuthUser user, @PathVariable int id) {
+        super.vote(user.id(), id);
     }
 }
