@@ -26,7 +26,7 @@ public abstract class AbstractUserController {
 
     public void delete(int id) {
         log.info("deleting user with id = {}", id);
-        userRepository.delete(id);
+        userRepository.deleteExisted(id);
     }
 
     public User save(User user) {

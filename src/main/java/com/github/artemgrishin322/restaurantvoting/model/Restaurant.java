@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,7 +21,7 @@ public class Restaurant extends NamedEntity {
 
     @Column(name = "address", nullable = false)
     @NotBlank
-    String address;
+    private String address;
 
     @Column(name = "description", nullable = false)
     @NotBlank
@@ -29,17 +30,17 @@ public class Restaurant extends NamedEntity {
 
     @Column(name = "registered", nullable = false, updatable = false, columnDefinition = "date default now()")
     @NotNull
-    Date registered = new Date();
+    private Date registered = new Date();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("registered DESC")
     @ToString.Exclude
     @JsonManagedReference
-    Set<Dish> todayMenu;
+    private List<Dish> dishes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @ToString.Exclude
-    Set<Vote> votes;
+    private Set<Vote> votes;
 
     public Restaurant(Integer id, String name, String address, String description) {
         super(id, name);

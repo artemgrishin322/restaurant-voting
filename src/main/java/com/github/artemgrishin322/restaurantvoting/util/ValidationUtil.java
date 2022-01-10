@@ -1,6 +1,7 @@
 package com.github.artemgrishin322.restaurantvoting.util;
 
 import com.github.artemgrishin322.restaurantvoting.HasId;
+import com.github.artemgrishin322.restaurantvoting.error.IllegalRequestDataException;
 
 import java.time.LocalTime;
 
@@ -26,6 +27,12 @@ public class ValidationUtil {
         if (LocalTime.now().isAfter(TIME_LIMIT)) {
             //TODO change to appropriate exception type
             throw new IllegalArgumentException("Too late to vote");
+        }
+    }
+
+    public static void checkModification(int count, int id) {
+        if (count == 0) {
+            throw new IllegalRequestDataException("Entity with id=" + id + " not found");
         }
     }
 }

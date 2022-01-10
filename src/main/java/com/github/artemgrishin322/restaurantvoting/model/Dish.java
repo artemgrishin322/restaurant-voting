@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,18 +19,18 @@ public class Dish extends NamedEntity {
 
     @Column(name = "registered", nullable = false, updatable = false, columnDefinition = "date default now()")
     @NotNull
-    Date registered = new Date();
+    private LocalDate registered = LocalDate.now();
 
     @Column(name = "price")
     @PositiveOrZero
     @NotNull
-    Integer price;
+    private Integer price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @ToString.Exclude
     @JsonBackReference
-    Restaurant restaurant;
+    private Restaurant restaurant;
 
     public Dish(Integer id, String name, Integer price) {
         super(id, name);

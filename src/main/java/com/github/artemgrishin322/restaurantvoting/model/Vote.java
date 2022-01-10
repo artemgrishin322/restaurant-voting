@@ -1,9 +1,6 @@
 package com.github.artemgrishin322.restaurantvoting.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,19 +15,19 @@ import java.time.LocalDate;
 public class Vote extends BaseEntity {
 
     @Column(name = "registered", nullable = false, updatable = false, columnDefinition = "date default now()")
-    LocalDate registered;
+    private LocalDate registered = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @NotNull
     @ToString.Exclude
-    User user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     @NotNull
     @ToString.Exclude
-    Restaurant restaurant;
+    private Restaurant restaurant;
 
     public Vote(Integer id) {
         super(id);

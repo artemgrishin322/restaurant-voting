@@ -1,19 +1,23 @@
-package com.github.artemgrishin322.restaurantvoting.repository;
+package com.github.artemgrishin322.restaurantvoting.service;
 
 import com.github.artemgrishin322.restaurantvoting.model.Dish;
+import com.github.artemgrishin322.restaurantvoting.repository.DishRepository;
+import com.github.artemgrishin322.restaurantvoting.repository.RestaurantRepository;
+import com.github.artemgrishin322.restaurantvoting.util.DateUtil;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class DataJpaDishRepository {
+public class DishService {
 
     private final RestaurantRepository restaurantRepository;
 
     private final DishRepository dishRepository;
 
-    public DataJpaDishRepository(RestaurantRepository restaurantRepository, DishRepository dishRepository) {
+    public DishService(RestaurantRepository restaurantRepository, DishRepository dishRepository) {
         this.restaurantRepository = restaurantRepository;
         this.dishRepository = dishRepository;
     }
@@ -37,5 +41,9 @@ public class DataJpaDishRepository {
         }
         dish.setRestaurant(restaurantRepository.findById(restaurantId).orElseThrow());
         return dishRepository.save(dish);
+    }
+
+    public List<Dish> getForDate(int restaurantId, LocalDate date) {
+        return dishRepository.getForDate(restaurantId, DateUtil.getDateOrToday(date));
     }
 }

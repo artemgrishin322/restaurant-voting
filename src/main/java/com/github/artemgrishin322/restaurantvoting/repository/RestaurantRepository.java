@@ -9,4 +9,8 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 public interface RestaurantRepository extends BaseRepository<Restaurant> {
+
+    @EntityGraph(attributePaths = "dishes", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT r FROM Restaurant r JOIN r.dishes d WHERE r.id=?1 AND d.registered=CURRENT_DATE")
+    Optional<Restaurant> getWithTodayMenu(int id);
 }

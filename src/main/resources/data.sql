@@ -21,7 +21,7 @@ VALUES ('Steak with potato', 1000, 1),
        ('Unai Maki', 850, 2),
        ('Philadelphia', 1200, 2);
 
-INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
-VALUES (1, 1),
-       (2, 1),
-       (3, 2);
+-- INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
+-- VALUES (1, 1),
+--        (2, 1),
+--        (3, 2);
