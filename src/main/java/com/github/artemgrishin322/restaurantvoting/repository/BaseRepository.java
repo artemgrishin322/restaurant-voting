@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.github.artemgrishin322.restaurantvoting.util.ValidationUtil.checkModification;
+import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.checkModification;
 
 @NoRepositoryBean
 public interface BaseRepository<T> extends JpaRepository<T, Integer> {

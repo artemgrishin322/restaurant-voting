@@ -6,8 +6,8 @@ VALUES ('User_1', 'user1@gmail.com', '{noop}user_1_password'),
 INSERT INTO USER_ROLES (USER_ID, ROLE)
 VALUES (1, 'USER'),
        (2, 'USER'),
-       (3, 'USER'),
-       (3, 'ADMIN');
+       (3, 'ADMIN'),
+       (3, 'USER');
 
 INSERT INTO RESTAURANT (NAME, ADDRESS, DESCRIPTION)
 VALUES ('Mon blah', 'Moscow, Temiryazevskaya st, p. 64', 'French restaurant'),
@@ -21,7 +21,8 @@ VALUES ('Steak with potato', 1000, 1),
        ('Unai Maki', 850, 2),
        ('Philadelphia', 1200, 2);
 
--- INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
--- VALUES (1, 1),
---        (2, 1),
---        (3, 2);
+INSERT INTO DISH (NAME, PRICE, REGISTERED, RESTAURANT_ID)
+VALUES ('Previous dish', 700, parsedatetime('10-02-2019', 'dd-MM-yyyy'), 1);
+
+INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
+VALUES (2, 1);

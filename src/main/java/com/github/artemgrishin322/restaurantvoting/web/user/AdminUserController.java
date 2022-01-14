@@ -17,12 +17,13 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
+import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.*;
+
 @RestController
 @RequestMapping(value = AdminUserController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @CacheConfig(cacheNames = "users")
 public class AdminUserController extends AbstractUserController {
-
     static final String REST_URL = "/api/admin/users";
 
     @Override
@@ -49,7 +50,8 @@ public class AdminUserController extends AbstractUserController {
     @CacheEvict(allEntries = true)
     public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         log.info("creating user {}", user);
-        User created = save(user);
+        checkNew(user);
+        User created = prepareAndSave(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -58,9 +60,10 @@ public class AdminUserController extends AbstractUserController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user, @PathVariable int id) {
+    public void update(@Valid @RequestBody User user, @PathVariable int id) {
         log.info("updating user with id = {}", id);
-        save(user);
+        assureIdConsistent(user, id);
+        prepareAndSave(user);
     }
 
     @GetMapping("/by-email")

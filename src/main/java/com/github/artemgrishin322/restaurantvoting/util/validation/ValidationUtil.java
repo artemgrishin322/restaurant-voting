@@ -1,13 +1,20 @@
-package com.github.artemgrishin322.restaurantvoting.util;
+package com.github.artemgrishin322.restaurantvoting.util.validation;
 
 import com.github.artemgrishin322.restaurantvoting.HasId;
 import com.github.artemgrishin322.restaurantvoting.error.IllegalRequestDataException;
+import com.github.artemgrishin322.restaurantvoting.error.LateVoteException;
+import lombok.AllArgsConstructor;
+import lombok.experimental.UtilityClass;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.NestedExceptionUtils;
+import org.springframework.core.env.Environment;
+import org.springframework.lang.NonNull;
 
 import java.time.LocalTime;
 
+@UtilityClass
 public class ValidationUtil {
-
-    public static final LocalTime TIME_LIMIT = LocalTime.of(11, 0);
 
     public static void checkNew(HasId bean) {
         if (!bean.isNew()) {
@@ -23,10 +30,9 @@ public class ValidationUtil {
         }
     }
 
-    public static void assureTimeLimitIsNotExceeded() {
-        if (LocalTime.now().isAfter(TIME_LIMIT)) {
-            //TODO change to appropriate exception type
-            throw new IllegalArgumentException("Too late to vote");
+    public static void assureTimeLimitIsNotExceeded(LocalTime timeLimit) {
+        if (LocalTime.now().isAfter(timeLimit)) {
+            throw new LateVoteException("Too late to vote");
         }
     }
 
@@ -34,5 +40,11 @@ public class ValidationUtil {
         if (count == 0) {
             throw new IllegalRequestDataException("Entity with id=" + id + " not found");
         }
+    }
+
+    @NonNull
+    public static Throwable getRootCause(Throwable t) {
+        Throwable rootCause = NestedExceptionUtils.getRootCause(t);
+        return rootCause != null ? rootCause : t;
     }
 }
