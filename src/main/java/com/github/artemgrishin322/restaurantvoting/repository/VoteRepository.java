@@ -20,6 +20,6 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @Query("SELECT v FROM Vote v JOIN FETCH v.restaurant r WHERE v.user.id=?1 ORDER BY v.registered")
     Set<Vote> getAllByUserId(int id);
 
-    @Query("SELECT v FROM Vote v JOIN FETCH v.user u WHERE v.restaurant.id=?1 AND v.registered=CURRENT_DATE ORDER BY v.registered")
+    @Query("SELECT v FROM Vote v WHERE v.restaurant.id=?1 AND v.registered=CURRENT_DATE ORDER BY v.registered")
     Set<Vote> getAllByRestaurantIdForToday(int id);
 }

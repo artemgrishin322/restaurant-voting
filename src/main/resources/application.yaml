@@ -28,6 +28,10 @@ spring:
     format:
       date: iso
 
+  cache:
+    cache-names: restaurants, dishes
+    caffeine.spec: maximumSize=50,expireAfterAccess=60s
+
 logging:
   level:
     root: WARN

@@ -1,6 +1,8 @@
 package com.github.artemgrishin322.restaurantvoting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.artemgrishin322.restaurantvoting.HasId;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.util.ProxyUtils;
@@ -19,8 +21,10 @@ public abstract class BaseEntity implements Persistable<Integer>, HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     protected Integer id;
 
+    @JsonIgnore
     @Override
     public boolean isNew() {
         return id == null;

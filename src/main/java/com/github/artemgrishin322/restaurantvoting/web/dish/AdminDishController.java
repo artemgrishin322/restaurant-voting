@@ -54,6 +54,7 @@ public class AdminDishController {
     }
 
     @GetMapping("/for-date")
+    @Cacheable
     public List<Dish> getForDate(@PathVariable int restaurantId,
                                  @RequestParam @Nullable LocalDate date) {
         log.info("getting dishes for {} for restaurant id={}", date, restaurantId);

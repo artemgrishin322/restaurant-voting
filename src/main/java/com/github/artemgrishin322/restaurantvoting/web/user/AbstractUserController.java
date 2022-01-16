@@ -33,11 +33,7 @@ public abstract class AbstractUserController {
         userRepository.deleteExisted(id);
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
-
     protected User prepareAndSave(User user) {
-        return save(UserUtil.prepareToSave(user));
+        return userRepository.save(UserUtil.prepareToSave(user));
     }
 }
