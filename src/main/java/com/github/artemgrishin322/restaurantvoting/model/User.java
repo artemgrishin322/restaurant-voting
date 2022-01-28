@@ -1,6 +1,5 @@
 package com.github.artemgrishin322.restaurantvoting.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.artemgrishin322.restaurantvoting.HasIdAndEmail;
 import com.github.artemgrishin322.restaurantvoting.util.validation.NoHtml;
@@ -16,7 +15,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -61,12 +63,6 @@ public class User extends NamedEntity implements HasIdAndEmail, Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @OrderBy("registered DESC")
-    @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @ToString.Exclude
-    private Set<Vote> votes;
 
     public User(User u) {
         this(u.id, u.name, u.email, u.password, u.enabled, u.registered, u.roles);

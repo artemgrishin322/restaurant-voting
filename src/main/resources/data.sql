@@ -13,7 +13,7 @@ INSERT INTO RESTAURANT (NAME, ADDRESS, DESCRIPTION)
 VALUES ('Mon blah', 'Moscow, Temiryazevskaya st, p. 64', 'French restaurant'),
        ('Yanomamo', 'New York, Broadway, p. 865', 'Sushi bar');
 
-INSERT INTO DISH (NAME, PRICE, RESTAURANT_ID)
+INSERT INTO MENU_ITEM (NAME, PRICE, RESTAURANT_ID)
 VALUES ('Steak with potato', 1000, 1),
        ('Mushroom soup', 750, 1),
        ('Tiramisu', 620, 1),
@@ -21,8 +21,12 @@ VALUES ('Steak with potato', 1000, 1),
        ('Unai Maki', 850, 2),
        ('Philadelphia', 1200, 2);
 
-INSERT INTO DISH (NAME, PRICE, REGISTERED, RESTAURANT_ID)
-VALUES ('Previous dish', 700, parsedatetime('10-02-2019', 'dd-MM-yyyy'), 1);
+INSERT INTO MENU_ITEM (NAME, PRICE, SERVE_DATE, RESTAURANT_ID)
+VALUES ('Previous menu item', 700, DATE '2019-02-10', 1);
 
 INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
 VALUES (2, 1);
+
+INSERT INTO VOTE (USER_ID, RESTAURANT_ID, REGISTERED)
+VALUES (1, 2, DATE '2021-12-31'),
+       (3, 1, DATE '2020-02-13');

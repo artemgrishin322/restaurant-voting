@@ -1,4 +1,4 @@
-package com.github.artemgrishin322.restaurantvoting.web.dish;
+package com.github.artemgrishin322.restaurantvoting.web.menuitem;
 
 import com.github.artemgrishin322.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.github.artemgrishin322.restaurantvoting.web.dish.DishTestData.*;
+import static com.github.artemgrishin322.restaurantvoting.web.menuitem.MenuItemTestData.*;
 import static com.github.artemgrishin322.restaurantvoting.web.restaurant.RestaurantTestData.RESTAURANT1_ID;
 import static com.github.artemgrishin322.restaurantvoting.web.restaurant.RestaurantTestData.RESTAURANT2_ID;
 import static com.github.artemgrishin322.restaurantvoting.web.user.UserTestData.USER1_MAIL;
@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class DishControllerTest extends AbstractControllerTest {
+class MenuItemControllerTest extends AbstractControllerTest {
     private static String getRestUrlForRestaurantId(int restaurantId) {
         return "/api/restaurants/" + restaurantId + "/dishes/";
     }
@@ -25,7 +25,7 @@ class DishControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(dish2, dish1, dish3));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
     }
 
     @Test
@@ -34,7 +34,7 @@ class DishControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(dish2, dish1, dish3));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
     }
 
     @Test
@@ -44,7 +44,7 @@ class DishControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(dish4));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_4));
     }
 
     @Test
