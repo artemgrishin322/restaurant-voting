@@ -11,10 +11,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public interface MenuItemRepository extends BaseRepository<MenuItem> {
 
-    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 ORDER BY m.name")
+    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 ORDER BY m.serveDate DESC, m.name")
     List<MenuItem> getAllForRestaurant(int restaurantId);
 
-    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 AND m.serveDate=?2 ORDER BY m.name")
+    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 AND m.serveDate=?2 ORDER BY m.serveDate DESC, m.name")
     List<MenuItem> getForDate(int restaurantId, LocalDate date);
 
     Optional<MenuItem> getByIdAndRestaurantId(int id, int restaurantId);

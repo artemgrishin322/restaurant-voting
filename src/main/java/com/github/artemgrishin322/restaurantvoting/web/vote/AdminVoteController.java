@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -23,7 +23,7 @@ public class AdminVoteController {
     private VoteRepository voteRepository;
 
     @GetMapping(AdminVoteController.REST_USER_URL)
-    public Set<Vote> getAllUsers(@PathVariable int id) {
+    public List<Vote> getAllUsers(@PathVariable int id) {
         return voteRepository.getAllByUserId(id);
     }
 
@@ -34,7 +34,7 @@ public class AdminVoteController {
     }
 
     @GetMapping(AdminVoteController.REST_RESTAURANT_URL)
-    public Set<Vote> getAllRestaurants(@PathVariable int id) {
+    public List<Vote> getAllRestaurants(@PathVariable int id) {
         return voteRepository.getAllByRestaurantIdForToday(id);
     }
 

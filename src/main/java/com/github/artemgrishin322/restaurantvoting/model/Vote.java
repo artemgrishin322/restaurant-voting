@@ -9,15 +9,15 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "restaurant_id", "registered"}, name = "vote_unique_per_day_idx")})
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "restaurant_id", "vote_date"}, name = "vote_unique_per_day_idx")})
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class Vote extends BaseEntity {
 
-    @Column(name = "registered", nullable = false, updatable = false, columnDefinition = "date default now()")
-    private LocalDate registered = LocalDate.now();
+    @Column(name = "vote_date", nullable = false, updatable = false, columnDefinition = "date default now()")
+    private LocalDate voteDate = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -37,7 +37,7 @@ public class RestaurantService {
     private UserRepository userRepository;
 
     public List<Restaurant> getAll() {
-        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
     }
 
     public Optional<Restaurant> get(int id) {

@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -25,13 +25,13 @@ public class VoteController {
     private VoteRepository voteRepository;
 
     @GetMapping("/api/profile/votes")
-    public Set<Vote> getAllMy(@AuthenticationPrincipal AuthUser authUser) {
+    public List<Vote> getAllMy(@AuthenticationPrincipal AuthUser authUser) {
         return voteRepository.getAllByUserId(authUser.id());
     }
 
     @GetMapping("/api/restaurants/{id}/votes")
     @Cacheable
-    public Set<Vote> getAllRestaurants(@PathVariable int id) {
+    public List<Vote> getAllRestaurants(@PathVariable int id) {
         return voteRepository.getAllByRestaurantIdForToday(id);
     }
 
