@@ -16,22 +16,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class MenuItemControllerTest extends AbstractControllerTest {
     private static String getRestUrlForRestaurantId(int restaurantId) {
-        return "/api/restaurants/" + restaurantId + "/dishes/";
+        return "/api/restaurants/" + restaurantId + "/menus/";
     }
 
     @Test
     @WithUserDetails(USER1_MAIL)
     void getAllForToday() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
-    }
-
-    @Test
-    @WithUserDetails(USER1_MAIL)
-    void getAllForRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + "today"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
@@ -40,7 +31,7 @@ class MenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(USER1_MAIL)
     void getForRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID) + DISH4_ID))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID) + MENU_ITEM4_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -57,18 +48,7 @@ class MenuItemControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnauthorized() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + DISH1_ID))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + MENU_ITEM1_ID))
                 .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithUserDetails(USER1_MAIL)
-    void getForDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + "for-date")
-                .param("date", "2019-02-10"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(previous));
     }
 }

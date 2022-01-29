@@ -13,16 +13,14 @@ INSERT INTO RESTAURANT (NAME, ADDRESS, DESCRIPTION)
 VALUES ('Mon blah', 'Moscow, Temiryazevskaya st, p. 64', 'French restaurant'),
        ('Yanomamo', 'New York, Broadway, p. 865', 'Sushi bar');
 
-INSERT INTO MENU_ITEM (NAME, PRICE, RESTAURANT_ID)
-VALUES ('Steak with potato', 1000, 1),
-       ('Mushroom soup', 750, 1),
-       ('Tiramisu', 620, 1),
-       ('California', 700, 2),
-       ('Unai Maki', 850, 2),
-       ('Philadelphia', 1200, 2);
-
-INSERT INTO MENU_ITEM (NAME, PRICE, SERVE_DATE, RESTAURANT_ID)
-VALUES ('Previous menu item', 700, DATE '2019-02-10', 1);
+INSERT INTO MENU_ITEM (NAME, SERVE_DATE, PRICE, RESTAURANT_ID)
+VALUES ('Steak with potato', CURRENT_DATE, 1000, 1),
+       ('Mushroom soup', CURRENT_DATE, 750, 1),
+       ('Tiramisu', CURRENT_DATE, 620, 1),
+       ('California', CURRENT_DATE, 700, 2),
+       ('Unai Maki', CURRENT_DATE, 850, 2),
+       ('Philadelphia', CURRENT_DATE, 1200, 2),
+       ('Previous menu item', DATE '2019-02-10', 700, 1);
 
 INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
 VALUES (2, 1);

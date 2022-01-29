@@ -6,18 +6,25 @@ import lombok.Value;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDate;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class MenuItemTo extends NamedTo {
 
-    @NotNull
     @PositiveOrZero
-    Integer price;
+    int price;
 
-    public MenuItemTo(Integer id, String name, Integer price) {
+    @NotNull
+    LocalDate serveDate;
+
+    int restaurantId;
+
+    public MenuItemTo(Integer id, String name, int price, LocalDate serveDate, int restaurantId) {
         super(id, name);
         this.price = price;
+        this.serveDate = serveDate;
+        this.restaurantId = restaurantId;
     }
 }

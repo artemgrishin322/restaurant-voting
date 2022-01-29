@@ -57,7 +57,6 @@ public class AdminRestaurantController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @CacheEvict(allEntries = true)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody RestaurantTo restaurantTo) {
-        Assert.notNull(restaurantTo, "restaurantTo should not be null");
         log.info("creating {}", restaurantTo);
         checkNew(restaurantTo);
         Restaurant created = service.save(RestaurantUtil.createNewFromTo(restaurantTo));
@@ -71,7 +70,6 @@ public class AdminRestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody RestaurantTo restaurantTo, @PathVariable int id) {
-        Assert.notNull(restaurantTo, "restaurantTo should not be null");
         assureIdConsistent(restaurantTo, id);
         service.save(RestaurantUtil.createFromTo(restaurantTo));
     }

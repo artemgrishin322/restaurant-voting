@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class AdminMenuItemControllerTest extends AbstractControllerTest {
     private static String getRestUrlForRestaurantId(int restaurantId) {
-        return "/api/admin/restaurants/" + restaurantId + "/dishes/";
+        return "/api/admin/restaurants/" + restaurantId + "/menus/";
     }
 
     @Autowired
@@ -34,7 +34,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getAllForToday() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + "today"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
@@ -43,16 +43,16 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getAllForFirstRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + "all"))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3, previous));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3, PREVIOUS_MENU_ITEM));
     }
 
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getAllForSecondRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID) + "all"))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_4, MENU_ITEM_6, MENU_ITEM_5));
@@ -61,7 +61,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getForRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID) + DISH4_ID))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID) + MENU_ITEM4_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -78,7 +78,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
 
     @Test
     void getUnauthorized() throws Exception {
-        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + DISH1_ID))
+        perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + MENU_ITEM1_ID))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -97,16 +97,16 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(previous));
+                .andExpect(DISH_MATCHER.contentJson(PREVIOUS_MENU_ITEM));
     }
 
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(getRestUrlForRestaurantId(RESTAURANT2_ID) + DISH4_ID))
+        perform(MockMvcRequestBuilders.delete(getRestUrlForRestaurantId(RESTAURANT2_ID) + MENU_ITEM4_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertFalse(menuItemRepository.findById(DISH4_ID).isPresent());
+        assertFalse(menuItemRepository.findById(MENU_ITEM4_ID).isPresent());
     }
 
     @Test
@@ -120,7 +120,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void createWithLocation() throws Exception {
-        MenuItemTo newTo = getNewTo();
+        MenuItemTo newTo = getNewTo(RESTAURANT1_ID);
         MenuItem newMenuItem = MenuItemUtil.createNewFromTo(newTo);
         ResultActions actions = perform(MockMvcRequestBuilders.post(getRestUrlForRestaurantId(RESTAURANT1_ID))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,7 +137,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void createInvalid() throws Exception {
-        MenuItemTo newInvalid = new MenuItemTo(null, "", -9870);
+        MenuItemTo newInvalid = new MenuItemTo(null, "", -9870, null, 0);
         perform(MockMvcRequestBuilders.post(getRestUrlForRestaurantId(RESTAURANT1_ID))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newInvalid)))
@@ -148,22 +148,22 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void update() throws Exception {
-        MenuItemTo updatedTo = getUpdatedTo();
-        perform(MockMvcRequestBuilders.put(getRestUrlForRestaurantId(RESTAURANT2_ID) + DISH5_ID)
+        MenuItemTo updatedTo = getUpdatedTo(MENU_ITEM5_ID, RESTAURANT2_ID);
+        perform(MockMvcRequestBuilders.put(getRestUrlForRestaurantId(RESTAURANT2_ID) + MENU_ITEM5_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        DISH_MATCHER.assertMatch(menuItemRepository.getById(DISH5_ID), MenuItemUtil.updateFromTo(new MenuItem(MENU_ITEM_5), updatedTo));
+        DISH_MATCHER.assertMatch(menuItemRepository.getById(MENU_ITEM5_ID), MenuItemUtil.updateFromTo(new MenuItem(MENU_ITEM_5), updatedTo));
     }
 
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void updateInvalid() throws Exception {
-        MenuItemTo updatedInvalid = new MenuItemTo(null, "", -9870);
+        MenuItemTo updatedInvalid = new MenuItemTo(null, "", -9870, null, 0);
         updatedInvalid.setId(MENU_ITEM_1.getId());
-        perform(MockMvcRequestBuilders.put(getRestUrlForRestaurantId(RESTAURANT1_ID) + DISH1_ID)
+        perform(MockMvcRequestBuilders.put(getRestUrlForRestaurantId(RESTAURANT1_ID) + MENU_ITEM1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updatedInvalid)))
                 .andDo(print())
@@ -173,10 +173,10 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void updateHtmlUnsafe() throws Exception {
-        MenuItemTo updated = getUpdatedTo();
-        updated.setId(DISH1_ID);
+        MenuItemTo updated = getUpdatedTo(MENU_ITEM1_ID, RESTAURANT1_ID);
+        updated.setId(MENU_ITEM1_ID);
         updated.setName("<script>alert123</script>");
-        perform(MockMvcRequestBuilders.put(getRestUrlForRestaurantId(RESTAURANT1_ID) + DISH1_ID)
+        perform(MockMvcRequestBuilders.put(getRestUrlForRestaurantId(RESTAURANT1_ID) + MENU_ITEM1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
