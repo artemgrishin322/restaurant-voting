@@ -8,12 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.time.LocalDate;
-
-import static com.github.artemgrishin322.restaurantvoting.web.restaurant.RestaurantTestData.NOT_FOUND_ID;
-import static com.github.artemgrishin322.restaurantvoting.web.user.UserTestData.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static com.github.artemgrishin322.restaurantvoting.web.restaurant.RestaurantTestData.*;
+import static com.github.artemgrishin322.restaurantvoting.web.user.UserTestData.USER1_MAIL;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,26 +51,5 @@ class RestaurantControllerTest extends AbstractControllerTest {
     void getUnauthorized() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT1_ID))
                 .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithUserDetails(USER1_MAIL)
-    void vote() throws Exception {
-        LocalDate today = LocalDate.now();
-        perform(MockMvcRequestBuilders.patch(REST_URL + RESTAURANT2_ID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNoContent());
-
-        assertTrue(voteRepository.getByUserRestaurantAndDate(USER1_ID, RESTAURANT2_ID, today).isPresent());
-    }
-
-    @Test
-    @WithUserDetails(USER1_MAIL)
-    void voteNotFound() throws Exception {
-        perform(MockMvcRequestBuilders.patch(REST_URL + NOT_FOUND_ID)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
     }
 }

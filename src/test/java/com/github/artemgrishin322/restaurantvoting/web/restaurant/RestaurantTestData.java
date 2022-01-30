@@ -1,7 +1,6 @@
 package com.github.artemgrishin322.restaurantvoting.web.restaurant;
 
 import com.github.artemgrishin322.restaurantvoting.model.Restaurant;
-import com.github.artemgrishin322.restaurantvoting.to.RestaurantTo;
 import com.github.artemgrishin322.restaurantvoting.web.MatcherFactory;
 
 public class RestaurantTestData {
@@ -17,13 +16,13 @@ public class RestaurantTestData {
     public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Yanomamo",
             "New York, Broadway, p. 865", "Sushi bar");
 
-    public static RestaurantTo getNewTo() {
-        return new RestaurantTo(null, "Brand New Restaurant", "Saint-Petersburg, Nevskaya st., building 17",
+    public static Restaurant getNew() {
+        return new Restaurant(null, "Brand New Restaurant", "Saint-Petersburg, Nevskaya st., building 17",
                 "Absolutely new restaurant with very handsome description");
     }
 
-    public static RestaurantTo getUpdatedTo() {
-        return new RestaurantTo(null, "Updated restaurant", "Moscow, Red Square, building 258",
+    public static Restaurant getUpdated(int id) {
+        return new Restaurant(id, "Updated restaurant", "Moscow, Red Square, building 258",
                 "Updated description");
     }
 }
