@@ -36,11 +36,6 @@ public class Restaurant extends NamedEntity {
     @NotNull
     private Date registered = new Date();
 
-    @SuppressWarnings("CopyConstructorMissesField")
-    public Restaurant(Restaurant restaurant) {
-        this(restaurant.id, restaurant.name, restaurant.address, restaurant.description);
-    }
-
     public Restaurant(Integer id, String name, String address, String description) {
         super(id, name);
         this.address = address;

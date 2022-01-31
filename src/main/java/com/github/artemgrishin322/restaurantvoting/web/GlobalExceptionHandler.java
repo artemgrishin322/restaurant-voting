@@ -1,7 +1,7 @@
 package com.github.artemgrishin322.restaurantvoting.web;
 
 import com.github.artemgrishin322.restaurantvoting.error.AppException;
-import com.github.artemgrishin322.restaurantvoting.error.LateVoteException;
+import com.github.artemgrishin322.restaurantvoting.error.TooLateToChangeVoteException;
 import com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,11 +61,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    @ExceptionHandler(LateVoteException.class)
-    public ResponseEntity<?> voteException(WebRequest request, LateVoteException ex) {
+    @ExceptionHandler(TooLateToChangeVoteException.class)
+    public ResponseEntity<?> voteException(WebRequest request, TooLateToChangeVoteException ex) {
         log.error("LateVoteException: {}", ex.getMessage());
-        return createResponseEntity(getDefaultBody(request, ErrorAttributeOptions.of(MESSAGE), null),
-                HttpStatus.CONFLICT);
+        return createResponseEntity(getDefaultBody(request, ex.getOptions(), null),
+               ex.getStatus());
     }
 
     private ResponseEntity<Object> handleBindingErrors(BindingResult result, WebRequest request) {

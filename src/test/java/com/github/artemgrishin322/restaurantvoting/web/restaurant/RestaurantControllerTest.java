@@ -1,9 +1,7 @@
 package com.github.artemgrishin322.restaurantvoting.web.restaurant;
 
-import com.github.artemgrishin322.restaurantvoting.repository.VoteRepository;
 import com.github.artemgrishin322.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -16,9 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class RestaurantControllerTest extends AbstractControllerTest {
     private static final String REST_URL = RestaurantController.REST_URL + '/';
-
-    @Autowired
-    private VoteRepository voteRepository;
 
     @Test
     @WithUserDetails(USER1_MAIL)

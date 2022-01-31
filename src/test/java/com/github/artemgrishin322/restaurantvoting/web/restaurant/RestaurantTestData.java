@@ -5,7 +5,7 @@ import com.github.artemgrishin322.restaurantvoting.web.MatcherFactory;
 
 public class RestaurantTestData {
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class,
-            "registered", "dishes", "votes");
+            "registered");
 
     public static final int RESTAURANT1_ID = 1;
     public static final int RESTAURANT2_ID = 2;

@@ -1,30 +1,48 @@
 package com.github.artemgrishin322.restaurantvoting.web.vote;
 
-import com.github.artemgrishin322.restaurantvoting.model.Vote;
-import com.github.artemgrishin322.restaurantvoting.repository.VoteRepository;
+import com.github.artemgrishin322.restaurantvoting.service.VoteService;
+import com.github.artemgrishin322.restaurantvoting.to.VoteTo;
 import com.github.artemgrishin322.restaurantvoting.web.AuthUser;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
+import java.time.LocalDate;
 
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
-@CacheConfig(cacheNames = "votes")
+@AllArgsConstructor
 public class VoteController {
+    static final String REST_URL = "/api/profile/votes";
 
-    @Autowired
-    private VoteRepository voteRepository;
+    private VoteService voteService;
 
-    @GetMapping("/api/profile/votes")
-    public List<Vote> getAllMy(@AuthenticationPrincipal AuthUser authUser) {
-        return voteRepository.getAllByUserId(authUser.id());
+    @GetMapping("/by-date")
+    public ResponseEntity<VoteTo> getByUserAndDate(@AuthenticationPrincipal AuthUser authUser, @RequestParam LocalDate voteDate) {
+        return ResponseEntity.of(voteService.getByUserIdAndDate(authUser.id(), voteDate));
+    }
+
+    @PostMapping
+    public ResponseEntity<VoteTo> createWithLocation(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("Vote from user id={} for restaurant id={}", authUser.id(), restaurantId);
+        VoteTo created = voteService.save(restaurantId, authUser.getUser());
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@RequestParam int restaurantId, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("Changing vote from user id={} for restaurant id={}", authUser.id(), restaurantId);
+        voteService.save(restaurantId, authUser.getUser());
     }
 }

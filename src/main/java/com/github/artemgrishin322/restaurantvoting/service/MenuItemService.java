@@ -4,9 +4,9 @@ import com.github.artemgrishin322.restaurantvoting.model.MenuItem;
 import com.github.artemgrishin322.restaurantvoting.repository.MenuItemRepository;
 import com.github.artemgrishin322.restaurantvoting.repository.RestaurantRepository;
 import com.github.artemgrishin322.restaurantvoting.to.MenuItemTo;
-import com.github.artemgrishin322.restaurantvoting.util.DateUtil;
+import com.github.artemgrishin322.restaurantvoting.util.DateTimeUtil;
 import com.github.artemgrishin322.restaurantvoting.util.MenuItemUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,12 +17,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class MenuItemService {
 
-    @Autowired
     private RestaurantRepository restaurantRepository;
 
-    @Autowired
     private MenuItemRepository menuItemRepository;
 
 
@@ -51,12 +50,12 @@ public class MenuItemService {
             getForRestaurant(menuItem.id(), restaurantId).orElseThrow(() -> new EntityNotFoundException("Entity with id=" + menuItem.id()
                     + " and restaurantId=" + restaurantId+ " not found"));
         }
-        menuItem.setRestaurant(restaurantRepository.findById(restaurantId).orElseThrow(() -> new EntityNotFoundException("No restaurant with id=" + restaurantId)));
+        menuItem.setRestaurant(restaurantRepository.getById(restaurantId));
         return MenuItemUtil.createFromMenuItem(menuItemRepository.save(menuItem));
     }
 
     public List<MenuItemTo> getForDate(int restaurantId, LocalDate date) {
-        return menuItemRepository.getForDate(restaurantId, DateUtil.getDateOrToday(date))
+        return menuItemRepository.getForDate(restaurantId, DateTimeUtil.getDateOrToday(date))
                 .stream()
                 .map(MenuItemUtil::createFromMenuItem)
                 .collect(Collectors.toList());

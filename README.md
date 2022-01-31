@@ -23,7 +23,7 @@ Each restaurant provides new menu each day.
 
 Credentials:
 ```
-User 1:  user1@gmail.ru / user_1_password
+User 1:  user1@gmail.com / user_1_password
 User 2:  user2@yandex.ru / user_2_password
 Admin:   admin@gmail.com / admin
 ```

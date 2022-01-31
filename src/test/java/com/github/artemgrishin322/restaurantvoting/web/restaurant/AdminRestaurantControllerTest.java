@@ -2,7 +2,6 @@ package com.github.artemgrishin322.restaurantvoting.web.restaurant;
 
 import com.github.artemgrishin322.restaurantvoting.model.Restaurant;
 import com.github.artemgrishin322.restaurantvoting.repository.RestaurantRepository;
-import com.github.artemgrishin322.restaurantvoting.repository.VoteRepository;
 import com.github.artemgrishin322.restaurantvoting.util.JsonUtil;
 import com.github.artemgrishin322.restaurantvoting.web.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
@@ -25,9 +24,6 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
-
-    @Autowired
-    private VoteRepository voteRepository;
 
     @Test
     @WithUserDetails(ADMIN_MAIL)

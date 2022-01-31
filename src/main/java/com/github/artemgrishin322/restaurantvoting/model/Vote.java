@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 public class Vote extends BaseEntity {
 
-    @Column(name = "vote_date", nullable = false, updatable = false, columnDefinition = "date default now()")
+    @Column(name = "vote_date", nullable = false, columnDefinition = "date default now()")
     private LocalDate voteDate = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)

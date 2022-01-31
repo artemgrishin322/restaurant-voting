@@ -2,13 +2,10 @@ package com.github.artemgrishin322.restaurantvoting.util.validation;
 
 import com.github.artemgrishin322.restaurantvoting.HasId;
 import com.github.artemgrishin322.restaurantvoting.error.IllegalRequestDataException;
-import com.github.artemgrishin322.restaurantvoting.error.LateVoteException;
-import lombok.AllArgsConstructor;
+import com.github.artemgrishin322.restaurantvoting.error.TooLateToChangeVoteException;
+import com.github.artemgrishin322.restaurantvoting.util.DateTimeUtil;
 import lombok.experimental.UtilityClass;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.NestedExceptionUtils;
-import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalTime;
@@ -30,9 +27,9 @@ public class ValidationUtil {
         }
     }
 
-    public static void assureTimeLimitIsNotExceeded(LocalTime timeLimit) {
-        if (LocalTime.now().isAfter(timeLimit)) {
-            throw new LateVoteException("Too late to vote");
+    public static void assureTimeLimitIsNotExceeded(LocalTime currentTime) {
+        if (currentTime.isAfter(DateTimeUtil.getTimeLimit())) {
+            throw new TooLateToChangeVoteException("To late to change vote, current time is " + currentTime + ", time limit is " + DateTimeUtil.getTimeLimit());
         }
     }
 
