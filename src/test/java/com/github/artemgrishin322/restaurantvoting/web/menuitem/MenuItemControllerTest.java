@@ -25,7 +25,7 @@ class MenuItemControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + "today"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3));
     }
 
     @Test

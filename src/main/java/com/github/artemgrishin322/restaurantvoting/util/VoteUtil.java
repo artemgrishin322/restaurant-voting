@@ -6,7 +6,9 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class VoteUtil {
+
+    @SuppressWarnings("ConstantConditions")
     public static VoteTo createFromVote(Vote vote) {
-        return new VoteTo(vote.getId(), vote.getVoteDate(), vote.getRestaurant().id());
+        return new VoteTo(vote.getId(), vote.getVoteDate(), vote.getRestaurant().getId());
     }
 }

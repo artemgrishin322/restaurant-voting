@@ -19,13 +19,14 @@ import java.util.List;
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
-@CacheConfig(cacheNames = "dishes")
+@CacheConfig(cacheNames = "menu_items")
 public class MenuItemController {
     public static final String REST_URL = "api/restaurants/{restaurantId}/menus";
 
     private MenuItemService service;
 
     @GetMapping("/api/restaurants/menus")
+    @Cacheable
     public List<MenuItemTo> getAllForAllRestaurantsForToday() {
         log.info("getting all menu items for all restaurants for today");
         return service.getAllForAllRestaurantsForToday();

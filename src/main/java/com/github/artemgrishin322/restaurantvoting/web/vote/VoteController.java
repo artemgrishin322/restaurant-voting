@@ -15,6 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.Optional;
+
+import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.checkNotFound;
 
 @RestController
 @RequestMapping(value = VoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,8 +30,10 @@ public class VoteController {
 
     @GetMapping("/by-date")
     public ResponseEntity<VoteTo> getByUserAndDate(@AuthenticationPrincipal AuthUser authUser, @RequestParam LocalDate voteDate) {
-        log.info("getting vote of user id={} by date {}", authUser.id(), voteDate.format(DateTimeUtil.FORMATTER));
-        return ResponseEntity.of(voteService.getByUserIdAndDate(authUser.id(), voteDate));
+        log.info("getting vote of user id={} by date {}", authUser.id(), voteDate.format(DateTimeUtil.DATE_FORMATTER));
+        Optional<VoteTo> found = voteService.getByUserIdAndDate(authUser.id(), voteDate);
+        checkNotFound(found, "No vote found for date " + voteDate.format(DateTimeUtil.DATE_FORMATTER));
+        return ResponseEntity.of(found);
     }
 
     @PostMapping

@@ -10,11 +10,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.github.artemgrishin322.restaurantvoting.util.DateTimeUtil.DATE_FORMATTER;
+import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.checkNotFound;
 
 @Service
 @AllArgsConstructor
@@ -22,20 +24,23 @@ public class MenuItemService {
     private RestaurantRepository restaurantRepository;
     private MenuItemRepository menuItemRepository;
 
-
     public List<MenuItemTo> getAllByRestaurantIdForToday(int restaurantId) {
         return getByDateAndRestaurantId(restaurantId, null);
     }
 
     public List<MenuItemTo> getAllByRestaurantId(int restaurantId) {
-        return menuItemRepository.getAllByRestaurantId(restaurantId)
+        List<MenuItem> allMenus = menuItemRepository.getAllByRestaurantId(restaurantId);
+        checkNotFound(allMenus, "No menus found for restaurantId=" + restaurantId);
+        return allMenus
                 .stream()
                 .map(MenuItemUtil::createFromMenuItem)
                 .collect(Collectors.toList());
     }
 
     public Optional<MenuItemTo> getByIdAndRestaurantId(int id, int restaurantId) {
-        return menuItemRepository.getByIdAndRestaurantId(id, restaurantId).map(MenuItemUtil::createFromMenuItem);
+        Optional<MenuItem> found = menuItemRepository.getByIdAndRestaurantId(id, restaurantId);
+        checkNotFound(found, "No menu item with id=" + id + " and restaurantId=" + restaurantId + " found");
+        return found.map(MenuItemUtil::createFromMenuItem);
     }
 
     public void delete(int id, int restaurantId) {
@@ -45,16 +50,21 @@ public class MenuItemService {
     @Transactional
     public MenuItemTo save(MenuItem menuItem, int restaurantId) {
         if (!menuItem.isNew()) {
-            getByIdAndRestaurantId(menuItem.id(), restaurantId).orElseThrow(() -> new EntityNotFoundException("Entity with id=" + menuItem.id()
-                    + " and restaurantId=" + restaurantId+ " not found"));
+            checkNotFound(getByIdAndRestaurantId(menuItem.id(), restaurantId), "No menu item with id=" + menuItem.id()
+                    + " and restaurantId=" + restaurantId + " found");
+        } else {
+            checkNotFound(restaurantRepository.findById(restaurantId), "No restaurant with id=" + restaurantId + " found");
         }
         menuItem.setRestaurant(restaurantRepository.getById(restaurantId));
         return MenuItemUtil.createFromMenuItem(menuItemRepository.save(menuItem));
     }
 
+    @Transactional
     public List<MenuItemTo> getByDateAndRestaurantId(int restaurantId, LocalDate date) {
-        return menuItemRepository.getByDateAndRestaurantId(restaurantId, DateTimeUtil.getDateOrToday(date))
-                .stream()
+        LocalDate dateOrToday = DateTimeUtil.getDateOrToday(date);
+        List<MenuItem> todayMenu = menuItemRepository.getByDateAndRestaurantId(restaurantId, dateOrToday);
+        checkNotFound(todayMenu, "No menu found for restaurantId=" + restaurantId + " and date " + dateOrToday.format(DATE_FORMATTER));
+        return todayMenu.stream()
                 .map(MenuItemUtil::createFromMenuItem)
                 .collect(Collectors.toList());
     }

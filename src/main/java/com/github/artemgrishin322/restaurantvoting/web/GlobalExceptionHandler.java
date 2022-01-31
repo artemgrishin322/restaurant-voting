@@ -5,6 +5,7 @@ import com.github.artemgrishin322.restaurantvoting.error.TooLateToChangeVoteExce
 import com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,8 @@ import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.M
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String EXCEPTION_DUPLICATE_EMAIL = "User with this email already exists";
+
+    private static final String EXCEPTION_SQL_CONSTRAINT_VIOLATION = "Entity with such properties already exists";
 
     private final ErrorAttributes errorAttributes;
 
@@ -58,7 +61,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> persistException(WebRequest request, EntityNotFoundException ex) {
         log.error("EntityNotFoundException: {}", ex.getMessage());
         return createResponseEntity(getDefaultBody(request, ErrorAttributeOptions.of(MESSAGE), null),
-                HttpStatus.UNPROCESSABLE_ENTITY);
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(TooLateToChangeVoteException.class)
@@ -66,6 +69,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("LateVoteException: {}", ex.getMessage());
         return createResponseEntity(getDefaultBody(request, ex.getOptions(), null),
                ex.getStatus());
+    }
+
+    @ExceptionHandler(JdbcSQLIntegrityConstraintViolationException.class)
+    public ResponseEntity<?> constraintViolationException(WebRequest request, JdbcSQLIntegrityConstraintViolationException ex) {
+        log.error("LateVoteException: {}", ex.getMessage());
+        return createResponseEntity(getDefaultBody(request, ErrorAttributeOptions.of(MESSAGE), EXCEPTION_SQL_CONSTRAINT_VIOLATION),
+                HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<Object> handleBindingErrors(BindingResult result, WebRequest request) {

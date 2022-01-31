@@ -12,7 +12,7 @@ public class RestaurantTestData {
     public static final int NOT_FOUND_ID = 100;
 
     public static final Restaurant restaurant1 = new Restaurant(RESTAURANT1_ID, "Mon blah",
-            "Moscow, Temiryazevskaya st, p. 64", "French restaurant");
+            "Moscow, Timiryazevskaya st, p. 64", "French restaurant");
     public static final Restaurant restaurant2 = new Restaurant(RESTAURANT2_ID, "Yanomamo",
             "New York, Broadway, p. 865", "Sushi bar");
 

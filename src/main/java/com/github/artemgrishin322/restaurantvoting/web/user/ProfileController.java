@@ -7,6 +7,7 @@ import com.github.artemgrishin322.restaurantvoting.web.AuthUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class ProfileController extends AbstractUserController {
     static final String REST_URL = "/api/profile";
 
     @GetMapping
+    @Cacheable
     public User get(@AuthenticationPrincipal AuthUser authUser) {
         log.info("getting authenticated user {}", authUser);
         return authUser.getUser();
@@ -36,6 +38,7 @@ public class ProfileController extends AbstractUserController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(allEntries = true)
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("deleting user with id={}", authUser.id());
         super.delete(authUser.id());

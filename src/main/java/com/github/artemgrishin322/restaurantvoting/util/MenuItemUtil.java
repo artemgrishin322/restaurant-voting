@@ -21,7 +21,8 @@ public class MenuItemUtil {
         return new MenuItem(menuItemTo.getId(), menuItemTo.getName(), menuItemTo.getPrice(), menuItemTo.getServeDate());
     }
 
+    @SuppressWarnings("ConstantConditions")
     public static MenuItemTo createFromMenuItem(MenuItem menuItem) {
-        return new MenuItemTo(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.getServeDate(), menuItem.getRestaurant().id());
+        return new MenuItemTo(menuItem.getId(), menuItem.getName(), menuItem.getPrice(), menuItem.getServeDate(), menuItem.getRestaurant().getId());
     }
 }

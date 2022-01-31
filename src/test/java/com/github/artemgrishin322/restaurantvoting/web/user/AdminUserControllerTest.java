@@ -206,6 +206,6 @@ class AdminUserControllerTest extends AbstractControllerTest {
                 .param("enabled", "false")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isNotFound());
     }
 }

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.checkNotFound;
 
 @RestController
 @RequestMapping(value = RestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -30,12 +33,14 @@ public class RestaurantController {
     @Cacheable
     public List<Restaurant> getAll() {
         log.info("getting all restaurants");
-        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
+        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> get(@PathVariable int id) {
         log.info("getting restaurant with id={}", id);
-        return ResponseEntity.of(restaurantRepository.findById(id));
+        Optional<Restaurant> found = restaurantRepository.findById(id);
+        checkNotFound(found, "No restaurant found with id=" + id);
+        return ResponseEntity.of(found);
     }
 }

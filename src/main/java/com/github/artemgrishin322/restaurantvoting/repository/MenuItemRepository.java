@@ -14,13 +14,13 @@ import static com.github.artemgrishin322.restaurantvoting.util.validation.Valida
 @Transactional(readOnly = true)
 public interface MenuItemRepository extends BaseRepository<MenuItem> {
 
-    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 ORDER BY m.serveDate DESC, m.name")
+    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 ORDER BY m.serveDate DESC, m.id")
     List<MenuItem> getAllByRestaurantId(int restaurantId);
 
-    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 AND m.serveDate=?2 ORDER BY m.name")
+    @Query("SELECT m FROM MenuItem m WHERE m.restaurant.id=?1 AND m.serveDate=?2 ORDER BY m.id")
     List<MenuItem> getByDateAndRestaurantId(int restaurantId, LocalDate date);
 
-    @Query("SELECT m FROM MenuItem m LEFT JOIN  FETCH m.restaurant r WHERE m.serveDate=CURRENT_DATE ORDER BY r.name, m.name")
+    @Query("SELECT m FROM MenuItem m WHERE m.serveDate=CURRENT_DATE ORDER BY m.restaurant.id, m.id")
     List<MenuItem> getAllForAllRestaurantsToday();
 
     Optional<MenuItem> getByIdAndRestaurantId(int id, int restaurantId);

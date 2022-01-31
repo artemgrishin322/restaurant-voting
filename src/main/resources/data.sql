@@ -10,7 +10,7 @@ VALUES (1, 'USER'),
        (3, 'USER');
 
 INSERT INTO RESTAURANT (NAME, ADDRESS, DESCRIPTION)
-VALUES ('Mon blah', 'Moscow, Temiryazevskaya st, p. 64', 'French restaurant'),
+VALUES ('Mon blah', 'Moscow, Timiryazevskaya st, p. 64', 'French restaurant'),
        ('Yanomamo', 'New York, Broadway, p. 865', 'Sushi bar');
 
 INSERT INTO MENU_ITEM (NAME, SERVE_DATE, PRICE, RESTAURANT_ID)

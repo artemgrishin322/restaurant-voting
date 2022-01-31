@@ -37,7 +37,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID) + "today"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3));
     }
 
     @Test
@@ -46,7 +46,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT1_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_2, MENU_ITEM_1, MENU_ITEM_3, PREVIOUS_MENU_ITEM));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_1, MENU_ITEM_2, MENU_ITEM_3, PREVIOUS_MENU_ITEM));
     }
 
     @Test
@@ -55,7 +55,7 @@ class AdminMenuItemControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(getRestUrlForRestaurantId(RESTAURANT2_ID)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_4, MENU_ITEM_6, MENU_ITEM_5));
+                .andExpect(DISH_MATCHER.contentJson(MENU_ITEM_4, MENU_ITEM_5, MENU_ITEM_6));
     }
 
     @Test

@@ -29,8 +29,8 @@ spring:
       date: iso
 
   cache:
-    cache-names: restaurants, dishes
-    caffeine.spec: maximumSize=50,expireAfterAccess=60s
+    cache-names: restaurants, menu_items
+    caffeine.spec: maximumSize=50,expireAfterAccess=30s
 
 logging:
   level:

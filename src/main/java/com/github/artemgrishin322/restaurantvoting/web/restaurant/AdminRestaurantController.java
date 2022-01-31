@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,36 +16,37 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
-import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.assureIdConsistent;
-import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.checkNew;
+import static com.github.artemgrishin322.restaurantvoting.util.validation.ValidationUtil.*;
 
 @RestController
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
-@CacheConfig(cacheNames = "restaurants")
+@CacheConfig(cacheNames = {"restaurants", "menu_items"})
 public class AdminRestaurantController {
     static final String REST_URL = "/api/admin/restaurants";
 
     private RestaurantRepository restaurantRepository;
 
     @GetMapping
-    @Cacheable
     public List<Restaurant> getAll() {
         log.info("getting all restaurants");
-        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
+        return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> get(@PathVariable int id) {
         log.info("getting restaurant with id={}", id);
-        return ResponseEntity.of(restaurantRepository.findById(id));
+        Optional<Restaurant> found = restaurantRepository.findById(id);
+        checkNotFound(found, "No restaurant found with id=" + id);
+        return ResponseEntity.of(found);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(allEntries = true)
+    @CacheEvict(cacheNames = {"restaurants", "menu_items"}, allEntries = true)
     public void delete(@PathVariable int id) {
         log.info("deleting restaurant with id={}", id);
         restaurantRepository.deleteExisted(id);

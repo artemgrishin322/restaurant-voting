@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Value
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 public class VoteTo extends BaseTo implements HasId {
 
+    @NotNull
     LocalDate voteDate;
 
     int restaurantId;
