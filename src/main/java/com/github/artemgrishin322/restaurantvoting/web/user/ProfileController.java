@@ -30,12 +30,14 @@ public class ProfileController extends AbstractUserController {
 
     @GetMapping
     public User get(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("getting authenticated user {}", authUser);
         return authUser.getUser();
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("deleting user with id={}", authUser.id());
         super.delete(authUser.id());
     }
 
@@ -55,6 +57,7 @@ public class ProfileController extends AbstractUserController {
     @Transactional
     @CacheEvict(allEntries = true)
     public void update(@RequestBody @Valid  UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
+        log.info("updating user {}", authUser);
         assureIdConsistent(userTo, authUser.id());
         User user = authUser.getUser();
         prepareAndSave(UserUtil.updateFromTo(user, userTo));

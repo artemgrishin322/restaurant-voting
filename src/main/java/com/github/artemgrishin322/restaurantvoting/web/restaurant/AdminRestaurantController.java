@@ -40,6 +40,7 @@ public class AdminRestaurantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> get(@PathVariable int id) {
+        log.info("getting restaurant with id={}", id);
         return ResponseEntity.of(restaurantRepository.findById(id));
     }
 
@@ -47,6 +48,7 @@ public class AdminRestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void delete(@PathVariable int id) {
+        log.info("deleting restaurant with id={}", id);
         restaurantRepository.deleteExisted(id);
     }
 
@@ -66,6 +68,7 @@ public class AdminRestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CacheEvict(allEntries = true)
     public void update(@RequestBody @Valid Restaurant restaurant, @PathVariable int id) {
+        log.info("updating with id={}", id);
         assureIdConsistent(restaurant, id);
         restaurantRepository.save(restaurant);
     }

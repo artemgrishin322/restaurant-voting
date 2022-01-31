@@ -29,11 +29,13 @@ public class RestaurantController {
     @GetMapping
     @Cacheable
     public List<Restaurant> getAll() {
+        log.info("getting all restaurants");
         return restaurantRepository.findAll(Sort.by(Sort.Direction.ASC, "name", "address"));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Restaurant> get(@PathVariable int id) {
+        log.info("getting restaurant with id={}", id);
         return ResponseEntity.of(restaurantRepository.findById(id));
     }
 }

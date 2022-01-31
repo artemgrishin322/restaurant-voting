@@ -2,6 +2,7 @@ package com.github.artemgrishin322.restaurantvoting.web.vote;
 
 import com.github.artemgrishin322.restaurantvoting.service.VoteService;
 import com.github.artemgrishin322.restaurantvoting.to.VoteTo;
+import com.github.artemgrishin322.restaurantvoting.util.DateTimeUtil;
 import com.github.artemgrishin322.restaurantvoting.web.AuthUser;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class VoteController {
 
     @GetMapping("/by-date")
     public ResponseEntity<VoteTo> getByUserAndDate(@AuthenticationPrincipal AuthUser authUser, @RequestParam LocalDate voteDate) {
+        log.info("getting vote of user id={} by date {}", authUser.id(), voteDate.format(DateTimeUtil.FORMATTER));
         return ResponseEntity.of(voteService.getByUserIdAndDate(authUser.id(), voteDate));
     }
 

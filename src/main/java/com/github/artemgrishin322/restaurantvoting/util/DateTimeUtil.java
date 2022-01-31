@@ -4,20 +4,23 @@ import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @UtilityClass
 public class DateTimeUtil {
-    private static LocalTime TIME_LIMIT = LocalTime.of(11, 0);
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+    private static LocalTime timeLimit = LocalTime.of(11, 0);
 
     public static LocalDate getDateOrToday(LocalDate date) {
         return date != null ? date : LocalDate.now();
     }
 
     public static void setTimeLimit(LocalTime newLimit) {
-        TIME_LIMIT = newLimit;
+        timeLimit = newLimit;
     }
 
     public static LocalTime getTimeLimit() {
-        return TIME_LIMIT;
+        return timeLimit;
     }
 }

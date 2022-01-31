@@ -24,7 +24,7 @@ public abstract class AbstractUserController {
     }
 
     public ResponseEntity<User> get(int id) {
-        log.info("get user with id = {}", id);
+        log.info("getting user with id = {}", id);
         return ResponseEntity.of(userRepository.findById(id));
     }
 
